@@ -6,5 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: baseUrl, changeFrequency: "monthly", priority: 1 },
     ...calculators.map(({ slug }) => ({ url: `${baseUrl}/calculateur/${slug}`, changeFrequency: "monthly" as const, priority: 0.8 })),
+    { url: `${baseUrl}/methode`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/confidentialite`, changeFrequency: "yearly", priority: 0.3 },
   ];
 }

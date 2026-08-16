@@ -23,7 +23,7 @@ export default function Home() {
       <h1>Voyez plus clair dans<br />votre <em>argent.</em></h1>
       <p>Des calculateurs rapides, gratuits et sans inscription pour comprendre votre épargne, vos dettes et votre patrimoine.</p>
       <div className="heroActions"><a className="primary" href="#outils">Explorer les calculateurs <span>→</span></a><span className="trust">Aucune donnée enregistrée</span></div>
-      <div className="proof"><div><b>3</b><span>outils essentiels</span></div><div><b>&lt; 1 min</b><span>pour un résultat</span></div><div><b>100%</b><span>gratuit</span></div></div>
+      <div className="proof"><div><b>{calculators.length}</b><span>outils essentiels</span></div><div><b>&lt; 1 min</b><span>pour un résultat</span></div><div><b>100%</b><span>gratuit</span></div></div>
     </section>
     <section className="demo" id="calculateurs">
       <div className="demoIntro"><span className="kicker">CALCULATEUR VEDETTE</span><h2>Projetez votre épargne</h2><p>Trois chiffres suffisent. Le calcul utilise une hypothèse de rendement annuel moyen de 5 %.</p></div>
@@ -38,6 +38,6 @@ export default function Home() {
     </section>
     <section className="collection" id="outils"><div className="sectionHead"><div><span className="kicker dark">LES ESSENTIELS</span><h2>Un calculateur.<br />Une réponse claire.</h2></div><p>Commencez par la question qui vous occupe aujourd’hui. Chaque outil explique son calcul et ses hypothèses.</p></div><div className="cardGrid">{calculators.map((item, index) => <a className={`toolCard ${item.color}`} href={`/calculateur/${item.slug}`} key={item.slug}><span>0{index + 1} · {item.category}</span><h3>{item.shortTitle}</h3><p>{item.description}</p><b>Calculer maintenant →</b></a>)}</div></section>
     <section className="method" id="methode"><span className="kicker">NOTRE MÉTHODE</span><h2>Vos chiffres restent<br />vos chiffres.</h2><div className="methodGrid"><p>Pas de compte à créer, pas de données personnelles collectées. Les calculs se font directement dans votre navigateur.</p><p>Les hypothèses sont visibles, prudentes et mises à jour au même endroit pour tous les calculateurs.</p><p>Les résultats donnent un ordre de grandeur pédagogique. Ils ne remplacent pas un conseil personnalisé.</p></div></section>
-    <footer><a className="brand" href="#top"><span>plum</span><b>e</b></a><p>Des repères simples pour vos décisions financières.</p><small>© 2026 Plume · Outils pédagogiques</small></footer>
+    <footer><a className="brand" href="#top"><span>plum</span><b>e</b></a><p>Des repères simples pour vos décisions financières.</p><small><a href="/methode">Méthode</a> · <a href="/confidentialite">Confidentialité</a></small></footer>
   </main>;
 }
