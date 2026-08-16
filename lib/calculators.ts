@@ -1,12 +1,13 @@
-export const assumptions = { inflation: 0.02, safeWithdrawalRate: 0.04, updatedAt: "16 août 2026" };
+export const assumptions = { inflation: 0.02, safeWithdrawalRate: 0.04, updatedAt: "16 août 2026", updatedAtIso: "2026-08-16" };
 
-export type CalculatorSlug = "interets-composes" | "objectif-epargne" | "rendement-apres-inflation" | "fonds-urgence" | "remboursement-dette" | "remboursement-anticipe" | "taux-endettement" | "patrimoine-net" | "independance-financiere";
+export type CalculatorSlug = "interets-composes" | "objectif-epargne" | "rendement-apres-inflation" | "fonds-urgence" | "remboursement-dette" | "remboursement-anticipe" | "taux-endettement" | "patrimoine-net" | "independance-financiere" | "mensualite-pret" | "budget-50-30-20" | "comparaison-epargne";
 export type Field = { key: string; label: string; defaultValue: number; min: number; max: number; step: number; suffix: string };
 export type Calculator = {
-  slug: CalculatorSlug; category: "Épargne" | "Dettes" | "Patrimoine"; title: string; shortTitle: string; description: string; color: "mint" | "coral" | "yellow";
+  slug: CalculatorSlug; category: "Épargne" | "Dettes" | "Patrimoine" | "Budget"; title: string; shortTitle: string; description: string; color: "mint" | "coral" | "yellow";
   fields: Field[]; explanation: string; formula: string; example: string; howTo: string[]; faq: { q: string; a: string }[];
 };
 export type CalculationResult = { headline: number; label: string; detail: string; unit: string; series: { label: string; value: number }[] };
+export type CalculationScenario = { label: string; value: number; unit: string };
 
 export const calculators: Calculator[] = [
   {
@@ -140,6 +141,53 @@ export const calculators: Calculator[] = [
     howTo: ["Estimez vos dépenses futures après impôts.", "Choisissez un taux de retrait prudent.", "Comparez le capital cible à votre portefeuille actuel.", "Ajoutez une marge pour les imprévus et la fiscalité."],
     faq: [{ q: "La règle des 4 % est-elle garantie ?", a: "Non. C’est un repère historique, sensible à la durée, aux marchés, aux frais, à la fiscalité et à votre allocation." }, { q: "Dois-je compter ma résidence principale ?", a: "Uniquement si elle peut réellement financer vos dépenses, par exemple via une vente ou des revenus." }, { q: "Comment choisir un taux plus prudent ?", a: "Un taux de 3 à 3,5 % augmente le capital cible mais laisse davantage de marge pour une longue retraite." }],
   },
+  {
+    slug: "mensualite-pret", category: "Dettes", shortTitle: "Mensualité de prêt", title: "Quelle mensualité prévoir pour votre prêt ?", color: "mint",
+    description: "Estimez la mensualité, l’assurance et le coût total d’un emprunt amortissable.",
+    fields: [
+      { key: "capital", label: "Montant emprunté", defaultValue: 200000, min: 1000, max: 2000000, step: 5000, suffix: "€" },
+      { key: "rate", label: "Taux annuel hors assurance", defaultValue: 3.5, min: 0, max: 20, step: 0.1, suffix: "%" },
+      { key: "years", label: "Durée du prêt", defaultValue: 20, min: 1, max: 40, step: 1, suffix: "ans" },
+      { key: "insurance_rate", label: "Taux annuel d’assurance", defaultValue: 0.3, min: 0, max: 3, step: 0.05, suffix: "%" },
+    ],
+    explanation: "Le calcul applique une mensualité constante au capital emprunté. L’assurance est estimée séparément sur le capital initial : votre contrat peut utiliser une autre base.",
+    formula: "Mensualité hors assurance = capital × taux mensuel ÷ (1 − (1 + taux mensuel)⁻ⁿ).",
+    example: "Pour 200 000 € sur 20 ans à 3,5 %, la mensualité hors assurance est proche de 1 160 €.",
+    howTo: ["Saisissez le capital réellement emprunté.", "Utilisez le taux nominal indiqué dans l’offre.", "Choisissez la durée envisagée.", "Ajoutez le taux d’assurance si vous le connaissez."],
+    faq: [{ q: "Le TAEG est-il utilisé ?", a: "Non. Le calcul utilise le taux nominal et une assurance estimée. Les frais de dossier, de garantie et autres coûts du TAEG ne sont pas inclus." }, { q: "Pourquoi l’échéancier bancaire peut-il différer ?", a: "La date de déblocage, les arrondis, le mode de calcul de l’assurance et les frais peuvent modifier le résultat." }, { q: "Une durée plus longue est-elle moins chère ?", a: "Elle réduit généralement la mensualité, mais augmente le coût cumulé des intérêts." }],
+  },
+  {
+    slug: "budget-50-30-20", category: "Budget", shortTitle: "Budget 50/30/20", title: "Comment se répartit votre budget mensuel ?", color: "yellow",
+    description: "Comparez vos dépenses et votre épargne à une grille budgétaire simple, sans en faire une règle rigide.",
+    fields: [
+      { key: "income", label: "Revenus nets mensuels", defaultValue: 2800, min: 100, max: 50000, step: 100, suffix: "€" },
+      { key: "needs", label: "Dépenses essentielles", defaultValue: 1400, min: 0, max: 40000, step: 50, suffix: "€" },
+      { key: "wants", label: "Dépenses choisies", defaultValue: 700, min: 0, max: 40000, step: 50, suffix: "€" },
+      { key: "savings", label: "Épargne et remboursements", defaultValue: 500, min: 0, max: 40000, step: 50, suffix: "€" },
+    ],
+    explanation: "La méthode 50/30/20 propose un point de comparaison : environ 50 % pour les besoins, 30 % pour les envies et 20 % pour l’épargne ou le remboursement de dettes. Adaptez-la à votre réalité.",
+    formula: "Solde mensuel = revenus − dépenses essentielles − dépenses choisies − épargne et remboursements.",
+    example: "Avec 2 800 € de revenus, les repères théoriques sont 1 400 €, 840 € et 560 €.",
+    howTo: ["Additionnez vos revenus nets réguliers.", "Classez les dépenses indispensables.", "Isolez les dépenses ajustables.", "Ajoutez l’épargne et les remboursements supplémentaires."],
+    faq: [{ q: "Faut-il respecter exactement 50/30/20 ?", a: "Non. C’est une grille de lecture, pas une norme. Le logement et la composition du foyer peuvent imposer une autre répartition." }, { q: "Où classer une mensualité de crédit ?", a: "La part obligatoire peut être classée dans les besoins ; un remboursement supplémentaire peut rejoindre l’effort d’épargne et de désendettement." }, { q: "Que signifie un solde négatif ?", a: "Les montants saisis dépassent vos revenus. Vérifiez les données puis recherchez les postes ajustables." }],
+  },
+  {
+    slug: "comparaison-epargne", category: "Épargne", shortTitle: "Comparer deux épargnes", title: "Quelle stratégie d’épargne accumule le plus ?", color: "coral",
+    description: "Comparez deux couples de versement mensuel et de rendement sur la même durée.",
+    fields: [
+      { key: "initial", label: "Capital initial commun", defaultValue: 5000, min: 0, max: 500000, step: 500, suffix: "€" },
+      { key: "monthly_a", label: "Versement mensuel A", defaultValue: 200, min: 0, max: 5000, step: 25, suffix: "€" },
+      { key: "rate_a", label: "Rendement annuel A", defaultValue: 3, min: 0, max: 15, step: 0.1, suffix: "%" },
+      { key: "monthly_b", label: "Versement mensuel B", defaultValue: 150, min: 0, max: 5000, step: 25, suffix: "€" },
+      { key: "rate_b", label: "Rendement annuel B", defaultValue: 5, min: 0, max: 15, step: 0.1, suffix: "%" },
+      { key: "years", label: "Durée commune", defaultValue: 15, min: 1, max: 50, step: 1, suffix: "ans" },
+    ],
+    explanation: "Le comparateur capitalise le même montant de départ puis ajoute les versements mensuels en fin de mois. Les rendements sont supposés constants, ce qui ne reflète pas la volatilité réelle.",
+    formula: "Capital futur = capital initial capitalisé + valeur future des versements mensuels.",
+    example: "Un versement plus élevé peut compenser un rendement moindre : comparez l’écart final et les versements cumulés.",
+    howTo: ["Saisissez le capital commun aux deux options.", "Définissez le versement et le rendement de l’option A.", "Répétez pour l’option B.", "Testez une durée identique et plusieurs hypothèses prudentes."],
+    faq: [{ q: "Le rendement le plus élevé gagne-t-il toujours ?", a: "Non. Le montant versé, la durée, les frais, la fiscalité et le risque influencent le résultat." }, { q: "La volatilité est-elle simulée ?", a: "Non. Le rendement est lissé et constant pour rendre la comparaison lisible." }, { q: "Les deux options peuvent-elles avoir le même rendement ?", a: "Oui. Vous isolerez alors l’effet des versements mensuels." }],
+  },
 ];
 
 const aliases: Record<string, CalculatorSlug> = { epargne: "interets-composes", dettes: "remboursement-dette", patrimoine: "patrimoine-net" };
@@ -152,6 +200,10 @@ function loanMonths(balance: number, annualRate: number, payment: number) {
   return rate === 0 ? balance / payment : -Math.log(1 - rate * balance / payment) / Math.log(1 + rate);
 }
 function timeline(finalValue: number, points = 6) { return Array.from({ length: points }, (_, i) => ({ label: `${Math.round((i / (points - 1)) * 100)} %`, value: finalValue * (i / (points - 1)) ** 1.35 })); }
+function futureSavings(initial: number, monthly: number, annualRate: number, years: number) {
+  const months = years * 12, rate = annualRate / 100 / 12, growth = (1 + rate) ** months;
+  return initial * growth + (rate === 0 ? monthly * months : monthly * (growth - 1) / rate);
+}
 
 export function calculate(slug: CalculatorSlug, v: Record<string, number>): CalculationResult {
   if (slug === "interets-composes") {
@@ -192,6 +244,59 @@ export function calculate(slug: CalculatorSlug, v: Record<string, number>): Calc
     const assets = v.cash + v.investments + v.property, net = assets - v.debts;
     return { headline: net, label: "Patrimoine net", unit: "€", detail: `${assets.toFixed(0)} € d’actifs et ${v.debts.toFixed(0)} € de dettes`, series: [{ label: "Actifs", value: assets }, { label: "Dettes", value: v.debts }, { label: "Net", value: Math.max(0, net) }] };
   }
+  if (slug === "mensualite-pret") {
+    const months = v.years * 12, rate = v.rate / 100 / 12;
+    const payment = rate === 0 ? v.capital / months : v.capital * rate / (1 - (1 + rate) ** -months);
+    const insurance = v.capital * (v.insurance_rate / 100) / 12;
+    const totalCost = (payment + insurance) * months - v.capital;
+    return { headline: payment + insurance, label: "Mensualité estimée", unit: "€/mois", detail: `${totalCost.toFixed(0)} € de coût total estimé, dont assurance`, series: [{ label: "Capital", value: v.capital }, { label: "Coût", value: Math.max(0, totalCost) }] };
+  }
+  if (slug === "budget-50-30-20") {
+    const balance = v.income - v.needs - v.wants - v.savings;
+    return { headline: balance, label: "Solde mensuel", unit: "€", detail: `${(v.needs / v.income * 100).toFixed(0)} % besoins · ${(v.wants / v.income * 100).toFixed(0)} % envies · ${(v.savings / v.income * 100).toFixed(0)} % épargne`, series: [{ label: "Besoins", value: v.needs }, { label: "Envies", value: v.wants }, { label: "Épargne", value: v.savings }, { label: "Disponible", value: Math.max(0, balance) }] };
+  }
+  if (slug === "comparaison-epargne") {
+    const optionA = futureSavings(v.initial, v.monthly_a, v.rate_a, v.years);
+    const optionB = futureSavings(v.initial, v.monthly_b, v.rate_b, v.years);
+    return { headline: Math.abs(optionA - optionB), label: `Écart en faveur de l’option ${optionA >= optionB ? "A" : "B"}`, unit: "€", detail: `A : ${optionA.toFixed(0)} € · B : ${optionB.toFixed(0)} €`, series: [{ label: "Option A", value: optionA }, { label: "Option B", value: optionB }] };
+  }
   const target = v.monthly_expenses * 12 / (v.withdrawal_rate / 100), gap = Math.max(0, target - v.current_portfolio);
   return { headline: target, label: "Capital cible théorique", unit: "€", detail: gap > 0 ? `${gap.toFixed(0)} € restent à constituer` : "Votre capital dépasse cette cible théorique", series: [{ label: "Capital actuel", value: v.current_portfolio }, { label: "Objectif", value: target }] };
+}
+
+export function buildScenarios(slug: CalculatorSlug, values: Record<string, number>): CalculationScenario[] {
+  const calculator = getCalculator(slug);
+  if (!calculator) return [];
+  const central = calculate(slug, values);
+  const scale = (key: string, factor: number) => {
+    const field = calculator.fields.find((item) => item.key === key);
+    if (!field) return values;
+    return { ...values, [key]: Math.min(field.max, Math.max(field.min, values[key] * factor)) };
+  };
+  let prudent = values, dynamic = values;
+  if (["interets-composes", "objectif-epargne", "comparaison-epargne"].includes(slug)) {
+    prudent = scale(slug === "interets-composes" ? "interest_rate" : slug === "objectif-epargne" ? "rate" : "rate_b", 0.7);
+    dynamic = scale(slug === "interets-composes" ? "interest_rate" : slug === "objectif-epargne" ? "rate" : "rate_b", 1.3);
+  } else if (slug === "rendement-apres-inflation") {
+    prudent = scale("inflation", 1.3); dynamic = scale("inflation", 0.7);
+  } else if (["remboursement-dette", "remboursement-anticipe"].includes(slug)) {
+    prudent = scale("payment", 0.85); dynamic = scale("payment", 1.15);
+  } else if (slug === "mensualite-pret") {
+    prudent = scale("rate", 1.2); dynamic = scale("rate", 0.8);
+  } else if (slug === "budget-50-30-20") {
+    prudent = scale("needs", 1.1); dynamic = scale("needs", 0.9);
+  } else if (slug === "fonds-urgence") {
+    prudent = scale("months", 1.25); dynamic = scale("months", 0.75);
+  } else if (slug === "taux-endettement") {
+    prudent = scale("loans", 1.2); dynamic = scale("loans", 0.8);
+  } else if (slug === "patrimoine-net") {
+    prudent = scale("property", 0.9); dynamic = scale("property", 1.1);
+  } else if (slug === "independance-financiere") {
+    prudent = scale("withdrawal_rate", 0.85); dynamic = scale("withdrawal_rate", 1.15);
+  }
+  return [
+    { label: "Prudent", value: calculate(slug, prudent).headline, unit: central.unit },
+    { label: "Central", value: central.headline, unit: central.unit },
+    { label: "Dynamique", value: calculate(slug, dynamic).headline, unit: central.unit },
+  ];
 }

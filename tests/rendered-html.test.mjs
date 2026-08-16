@@ -31,10 +31,21 @@ test("server-renders the CalculArgent homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>CalculArgent — Calculateurs financiers gratuits<\/title>/i);
   assert.match(html, /Voyez plus clair/);
-  assert.match(html, /9<\/b><span>outils essentiels/);
+  assert.match(html, /12<\/b><span>outils essentiels/);
   assert.match(html, /"@type":"WebSite"/);
   assert.match(html, /href="\/calculateur\/interets-composes"/);
+  assert.match(html, /href="\/calculateur\/mensualite-pret"/);
+  assert.match(html, /href="\/budget"/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Building your site/i);
+});
+
+test("publishes category, author and new calculator pages", async () => {
+  const responses = await Promise.all([render("/epargne"), render("/dettes"), render("/patrimoine"), render("/budget"), render("/auteur"), render("/calculateur/mensualite-pret")]);
+  assert.deepEqual(responses.map((response) => response.status), [200, 200, 200, 200, 200, 200]);
+  const pages = await Promise.all(responses.map((response) => response.text()));
+  assert.match(pages[0], /Calculateurs d’épargne/);
+  assert.match(pages[4], /Loïc Fontaine/);
+  assert.match(pages[5], /Mensualité estimée|Quelle mensualité/);
 });
 
 test("keeps calculator content and assumptions centralized", async () => {

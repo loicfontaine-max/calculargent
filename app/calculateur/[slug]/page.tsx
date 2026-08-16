@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { CalculatorEngine } from "../../../components/CalculatorEngine";
 import { AdSlot } from "../../../components/AdSlot";
+import { HelpfulFeedback } from "../../../components/HelpfulFeedback";
 import { assumptions, calculators, canonicalSlug, getCalculator } from "../../../lib/calculators";
 
 export function generateStaticParams() { return calculators.map(({ slug }) => ({ slug })); }
@@ -14,8 +15,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title, description: calculator.description,
     alternates: { canonical: `/calculateur/${calculator.slug}` },
-    openGraph: { title, description: calculator.description, url: `/calculateur/${calculator.slug}`, type: "website", images: [] },
-    twitter: { card: "summary", title, description: calculator.description, images: [] },
+    openGraph: { title, description: calculator.description, url: `/calculateur/${calculator.slug}`, type: "website", images: ["/og.png"] },
+    twitter: { card: "summary_large_image", title, description: calculator.description, images: ["/og.png"] },
   };
 }
 
@@ -35,7 +36,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     <nav className="nav"><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="/#outils">Calculateurs</a><a href="#comprendre">Comprendre</a><a href="#faq">FAQ</a></div><a className="back" href="/#outils">← Tous les outils</a></nav>
     <div className="breadcrumb"><a href="/">Accueil</a><span>›</span><a href="/#outils">Calculateurs</a><span>›</span><b>{calculator.shortTitle}</b></div>
-    <header className="detailHero"><span className="kicker dark">{calculator.category.toUpperCase()} · CALCULATEUR GRATUIT</span><h1>{calculator.title}</h1><p>{calculator.description} Modifiez les données : le résultat et le lien se mettent à jour instantanément.</p></header>
+    <header className="detailHero"><span className="kicker dark">{calculator.category.toUpperCase()} · CALCULATEUR GRATUIT</span><h1>{calculator.title}</h1><p>{calculator.description} Modifiez les données : le résultat se met à jour instantanément. Le partage reste volontaire.</p></header>
     <section className="engineWrap"><CalculatorEngine calculator={calculator} /><p className="calculatorDisclaimer">Simulation indicative, avant fiscalité et frais sauf mention contraire. Elle ne constitue ni une prévision ni un conseil financier.</p></section>
     <AdSlot placement="content" slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_CONTENT} />
 
@@ -49,6 +50,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
 
     <section className="related"><div className="sectionHead"><div><span className="kicker dark">POURSUIVRE VOTRE CALCUL</span><h2>Trois outils complémentaires</h2></div><p>Reliez vos décisions d’épargne, de dette et de patrimoine pour obtenir une vision plus complète.</p></div><div className="cardGrid">{related.map((item) => <a className={`toolCard compact ${item.color}`} href={`/calculateur/${item.slug}`} key={item.slug}><span>{item.category}</span><h3>{item.shortTitle}</h3><p>{item.description}</p><b>Ouvrir le calculateur →</b></a>)}</div></section>
     <section className="methodNote"><b>Méthodologie transparente</b><p>Hypothèses et contenus vérifiés le {assumptions.updatedAt}. Les formules sont visibles afin que vous puissiez comprendre les limites de chaque estimation.</p></section>
-    <footer><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><p>Des repères simples pour vos décisions financières.</p><small><a href="/a-propos">À propos</a> · <a href="/methode">Méthode</a> · <a href="/contact">Contact</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/cookies">Cookies</a> · <a href="/publicite">Publicité</a> · <a href="/mentions-legales">Mentions légales</a></small></footer>
+    <section className="feedbackWrap"><HelpfulFeedback title={calculator.shortTitle} /></section>
+    <footer><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><p>Des repères simples pour vos décisions financières.</p><small><a href="/a-propos">À propos</a> · <a href="/auteur">Auteur</a> · <a href="/methode">Méthode</a> · <a href="/contact">Contact</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/cookies">Cookies</a> · <a href="/publicite">Publicité</a> · <a href="/mentions-legales">Mentions légales</a></small></footer>
   </main>;
 }
