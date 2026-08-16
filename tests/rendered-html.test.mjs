@@ -50,4 +50,24 @@ test("keeps calculator content and assumptions centralized", async () => {
   assert.match(calculatorPage, /generateStaticParams/);
   assert.match(calculatorPage, /generateMetadata/);
   assert.match(layout, /NEXT_PUBLIC_ADSENSE_CLIENT/);
+  assert.doesNotMatch(layout, /next\/font/);
+});
+
+test("publishes complete trust pages without local filesystem paths", async () => {
+  const [homeResponse, legalResponse, contactResponse] = await Promise.all([
+    render(),
+    render("/mentions-legales"),
+    render("/contact"),
+  ]);
+  const [home, legal, contact] = await Promise.all([
+    homeResponse.text(),
+    legalResponse.text(),
+    contactResponse.text(),
+  ]);
+
+  assert.doesNotMatch(home, /\/Users\//);
+  assert.match(legal, /Loïc Fontaine/);
+  assert.match(legal, /OpenAI Ireland Limited/);
+  assert.doesNotMatch(legal, /À compléter|Version préparatoire/i);
+  assert.match(contact, /Ouvrir une demande sur GitHub/);
 });
