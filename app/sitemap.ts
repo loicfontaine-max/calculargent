@@ -8,5 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...calculators.map(({ slug }) => ({ url: `${baseUrl}/calculateur/${slug}`, changeFrequency: "monthly" as const, priority: 0.8 })),
     { url: `${baseUrl}/methode`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/confidentialite`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${baseUrl}/a-propos`, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${baseUrl}/cookies`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${baseUrl}/publicite`, changeFrequency: "yearly", priority: 0.2 },
   ];
 }
