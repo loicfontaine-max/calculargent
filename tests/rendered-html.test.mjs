@@ -61,6 +61,21 @@ test("publishes category, author and new calculator pages", async () => {
   assert.match(pages[5], /Mensualité estimée|Quelle mensualité/);
 });
 
+test("publishes the guide hub and complete editorial guides", async () => {
+  const paths = ["/guides", "/guides/interets-composes", "/guides/combien-epargner-par-mois", "/guides/rembourser-credit-ou-epargner", "/guides/calcul-taux-endettement", "/guides/construire-fonds-urgence"];
+  const responses = await Promise.all(paths.map((path) => render(path)));
+  assert.deepEqual(responses.map((response) => response.status), paths.map(() => 200));
+  const pages = await Promise.all(responses.map((response) => response.text()));
+  assert.match(pages[0], /Les guides/);
+  for (const html of pages.slice(1)) {
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /SOURCES OFFICIELLES/);
+    assert.match(html, /PASSEZ À VOS CHIFFRES/);
+    assert.doesNotMatch(html, /<meta property="og:image"[^>]+og\.png/);
+  }
+});
+
 test("keeps calculator content and assumptions centralized", async () => {
   const [calculators, calculatorPage, layout] = await Promise.all([
     readFile(new URL("../lib/calculators.ts", import.meta.url), "utf8"),

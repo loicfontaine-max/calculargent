@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { calculators } from "../lib/calculators";
 import { AdSlot } from "../components/AdSlot";
+import { guides } from "../lib/guides";
 
 const euros = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 
@@ -18,7 +19,7 @@ export default function Home() {
 
   return <main>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "CalculArgent", alternateName: "Calcul Argent", url: "https://calculargent.fr", description: "Des calculateurs simples et gratuits pour l’épargne, les dettes et le patrimoine.", inLanguage: "fr-FR", isAccessibleForFree: true, author: { "@type": "Person", name: "Loïc Fontaine", url: "https://calculargent.fr/auteur" } }) }} />
-      <nav className="nav"><a className="brand" href="#top"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="#outils">Calculateurs</a><a href="/epargne">Épargne</a><a href="/dettes">Dettes</a><a href="#methode">Méthode</a></div><a className="navCta" href="#outils">Commencer</a></nav>
+      <nav className="nav"><a className="brand" href="#top"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="#outils">Calculateurs</a><a href="/guides">Guides</a><a href="/epargne">Épargne</a><a href="#methode">Méthode</a></div><a className="navCta" href="#outils">Commencer</a></nav>
     <section className="hero" id="top">
       <div className="eyebrow"><i /> Finance simple, décisions éclairées</div>
       <h1>Voyez plus clair dans<br />votre <em>argent.</em></h1>
@@ -39,7 +40,8 @@ export default function Home() {
       </div>
     </section>
     <section className="collection" id="outils"><div className="sectionHead"><div><span className="kicker dark">LES ESSENTIELS</span><h2>Un calculateur.<br />Une réponse claire.</h2></div><p>Commencez par la question qui vous occupe aujourd’hui. Chaque outil explique son calcul et ses hypothèses.</p></div><div className="categoryLinks"><a href="/epargne">Parcours Épargne →</a><a href="/dettes">Parcours Dettes →</a><a href="/patrimoine">Parcours Patrimoine →</a><a href="/budget">Parcours Budget →</a></div><div className="cardGrid">{calculators.map((item, index) => <a className={`toolCard ${item.color}`} href={`/calculateur/${item.slug}`} key={item.slug}><span>{String(index + 1).padStart(2, "0")} · {item.category}</span><h3>{item.shortTitle}</h3><p>{item.description}</p><b>Calculer maintenant →</b></a>)}</div></section>
+    <section className="homeGuides"><div className="sectionHead"><div><span className="kicker">AVANT DE CALCULER</span><h2>Cinq guides pour<br />prendre du recul.</h2></div><p>Une formule donne un résultat. Un guide aide à comprendre les hypothèses, les risques et la prochaine décision.</p></div><div className="homeGuideGrid">{guides.map((guide, index) => <a href={`/guides/${guide.slug}`} key={guide.slug}><span>{String(index + 1).padStart(2, "0")} · {guide.category} · {guide.readingTime}</span><h3>{guide.shortTitle}</h3><b>Lire le guide →</b></a>)}</div><a className="allGuidesLink" href="/guides">Voir tous les guides et leurs sources →</a></section>
     <section className="method" id="methode"><span className="kicker">NOTRE MÉTHODE</span><h2>Vos chiffres restent<br />vos chiffres.</h2><div className="methodGrid"><p>Pas de compte à créer, pas de données personnelles collectées. Les calculs se font directement dans votre navigateur.</p><p>Les hypothèses sont visibles, prudentes et mises à jour au même endroit pour tous les calculateurs.</p><p>Les résultats donnent un ordre de grandeur pédagogique. Ils ne remplacent pas un conseil personnalisé.</p></div></section>
-    <footer><a className="brand" href="#top"><span>Calcul</span><b>Argent</b></a><p>Des repères simples pour vos décisions financières.</p><small><a href="/a-propos">À propos</a> · <a href="/auteur">Auteur</a> · <a href="/methode">Méthode</a> · <a href="/contact">Contact</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/cookies">Cookies</a> · <a href="/publicite">Publicité</a> · <a href="/mentions-legales">Mentions légales</a></small></footer>
+    <footer><a className="brand" href="#top"><span>Calcul</span><b>Argent</b></a><p>Des repères simples pour vos décisions financières.</p><small><a href="/guides">Guides</a> · <a href="/a-propos">À propos</a> · <a href="/auteur">Auteur</a> · <a href="/methode">Méthode</a> · <a href="/contact">Contact</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/cookies">Cookies</a> · <a href="/publicite">Publicité</a> · <a href="/mentions-legales">Mentions légales</a></small></footer>
   </main>;
 }

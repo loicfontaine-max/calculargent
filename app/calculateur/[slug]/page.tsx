@@ -5,6 +5,7 @@ import { AdSlot } from "../../../components/AdSlot";
 import { HelpfulFeedback } from "../../../components/HelpfulFeedback";
 import { assumptions, calculators, canonicalSlug, getCalculator } from "../../../lib/calculators";
 import { editorialSources } from "../../../lib/editorial-sources";
+import { getGuidesForCalculator } from "../../../lib/guides";
 
 export function generateStaticParams() { return calculators.map(({ slug }) => ({ slug })); }
 
@@ -30,6 +31,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
   const siteUrl = process.env.SITE_URL || "https://calculargent.fr";
   const categoryRoute = { Épargne: "epargne", Dettes: "dettes", Patrimoine: "patrimoine", Budget: "budget" }[calculator.category];
   const sources = editorialSources[calculator.slug];
+  const calculatorGuides = getGuidesForCalculator(calculator.slug);
   const related = calculators.filter((item) => item.slug !== calculator.slug).sort((a, b) => Number(b.category === calculator.category) - Number(a.category === calculator.category)).slice(0, 3);
   const structuredData = [
     { "@context": "https://schema.org", "@type": "WebPage", name: calculator.title, description: calculator.description, url: `${siteUrl}/calculateur/${calculator.slug}`, dateModified: assumptions.updatedAtIso, inLanguage: "fr-FR", isAccessibleForFree: true, author: { "@type": "Person", name: "Loïc Fontaine", url: `${siteUrl}/auteur` } },
@@ -54,6 +56,8 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
       <section className="sourceBox"><div><span className="kicker dark">SOURCES INSTITUTIONNELLES</span><h2>Repères vérifiables</h2><p>Ces ressources éclairent les notions et précautions utilisées dans cette page. Elles ne valident pas une simulation personnelle et ne remplacent pas les conditions d’un contrat.</p></div><ul>{sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer"><b>{source.label}</b><span>{source.publisher} ↗</span></a></li>)}</ul></section>
       <section className="faq" id="faq"><span className="kicker dark">QUESTIONS FRÉQUENTES</span><h2>Ce qu’il faut savoir</h2>{calculator.faq.map((item) => <details key={item.q}><summary>{item.q}<b>+</b></summary><p>{item.a}</p></details>)}</section>
     </article>
+
+    {calculatorGuides.length > 0 && <section className="calculatorGuideCta"><div><span className="kicker dark">POUR INTERPRÉTER LE RÉSULTAT</span><h2>{calculatorGuides[0].shortTitle}</h2><p>{calculatorGuides[0].description}</p></div><a className="primary" href={`/guides/${calculatorGuides[0].slug}`}>Lire le guide <span>→</span></a></section>}
 
     <section className="related"><div className="sectionHead"><div><span className="kicker dark">POURSUIVRE VOTRE CALCUL</span><h2>Trois outils complémentaires</h2></div><p>Reliez vos décisions d’épargne, de dette et de patrimoine pour obtenir une vision plus complète.</p></div><div className="cardGrid">{related.map((item) => <a className={`toolCard compact ${item.color}`} href={`/calculateur/${item.slug}`} key={item.slug}><span>{item.category}</span><h3>{item.shortTitle}</h3><p>{item.description}</p><b>Ouvrir le calculateur →</b></a>)}</div></section>
     <section className="methodNote"><b>Méthodologie transparente</b><p>Calcul et références vérifiés le {assumptions.updatedAt} par <a className="textLink" href="/auteur">Loïc Fontaine</a>. Les formules sont visibles afin que vous puissiez comprendre les limites de chaque estimation.</p></section>

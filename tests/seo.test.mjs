@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { calculators } from "../lib/calculators.ts";
 import { editorialSources } from "../lib/editorial-sources.ts";
+import { guides } from "../lib/guides.ts";
 
 const trustedHosts = new Set(["www.amf-france.org", "www.insee.fr", "www.economie.gouv.fr", "www.service-public.fr", "www.banque-france.fr"]);
 
@@ -26,6 +27,20 @@ test("keeps noindex trust pages out of the sitemap", async () => {
   assert.match(source, /lastModified/);
   assert.match(source, /\.\.\.calculators\.map/);
   assert.match(source, /\.\.\.categorySlugs\.map/);
+  assert.match(source, /\.\.\.guideSlugs\.map/);
   assert.doesNotMatch(source, /baseUrl}\/contact/);
   assert.doesNotMatch(source, /baseUrl}\/mentions-legales/);
+});
+
+test("publishes five substantial guides backed by official sources", () => {
+  assert.equal(guides.length, 5);
+  assert.equal(new Set(guides.map(({ slug }) => slug)).size, 5);
+  for (const guide of guides) {
+    assert.ok(guide.sections.length >= 3, `${guide.slug} doit comporter au moins trois sections`);
+    assert.ok(guide.checklist.length >= 5, `${guide.slug} doit proposer un plan d’action`);
+    assert.ok(guide.comparison.rows.length >= 3, `${guide.slug} doit proposer une comparaison`);
+    assert.ok(guide.faq.length >= 3, `${guide.slug} doit répondre aux questions fréquentes`);
+    assert.ok(guide.sources.length >= 2, `${guide.slug} doit citer deux sources`);
+    for (const source of guide.sources) assert.ok(trustedHosts.has(new URL(source.url).hostname));
+  }
 });
