@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact | CalculArgent",
   description: "Contacter CalculArgent pour signaler une erreur, proposer une amélioration ou exercer un droit.",
+  alternates: { canonical: "/contact" },
   robots: { index: false, follow: true },
   openGraph: { title: "Contact | CalculArgent", description: "Signaler une erreur ou proposer une amélioration.", images: [] },
   twitter: { title: "Contact | CalculArgent", description: "Signaler une erreur ou proposer une amélioration.", images: [] },

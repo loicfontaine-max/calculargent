@@ -4,13 +4,20 @@ import { categoryPages, type CategorySlug } from "../lib/categories";
 
 export function categoryMetadata(slug: CategorySlug): Metadata {
   const category = categoryPages[slug];
-  return { title: `${category.title} | CalculArgent`, description: category.description, alternates: { canonical: `/${slug}` } };
+  const title = `${category.title} | CalculArgent`;
+  return { title, description: category.description, alternates: { canonical: `/${slug}` }, openGraph: { title, description: category.description, url: `/${slug}`, type: "website", images: ["/og.png"] }, twitter: { card: "summary_large_image", title, description: category.description, images: ["/og.png"] } };
 }
 
 export function CategoryLanding({ slug }: { slug: CategorySlug }) {
   const category = categoryPages[slug];
   const tools = calculators.filter((item) => item.category === category.name);
+  const siteUrl = process.env.SITE_URL || "https://calculargent.fr";
+  const structuredData = [
+    { "@context": "https://schema.org", "@type": "CollectionPage", name: category.title, description: category.description, url: `${siteUrl}/${slug}`, inLanguage: "fr-FR", isAccessibleForFree: true, mainEntity: { "@type": "ItemList", itemListElement: tools.map((tool, index) => ({ "@type": "ListItem", position: index + 1, name: tool.shortTitle, url: `${siteUrl}/calculateur/${tool.slug}` })) } },
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Accueil", item: siteUrl }, { "@type": "ListItem", position: 2, name: category.name, item: `${siteUrl}/${slug}` }] },
+  ];
   return <main>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     <nav className="nav"><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="/epargne">Épargne</a><a href="/dettes">Dettes</a><a href="/patrimoine">Patrimoine</a><a href="/budget">Budget</a></div><a className="back" href="/#outils">Tous les outils</a></nav>
     <div className="breadcrumb"><a href="/">Accueil</a><span>›</span><b>{category.name}</b></div>
     <header className="categoryHero"><span className="kicker dark">PARCOURS {category.name.toUpperCase()}</span><h1>{category.title}</h1><p>{category.description}</p></header>

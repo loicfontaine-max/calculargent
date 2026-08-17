@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL || "http://localhost:3000"),
   title: "CalculArgent — Calculateurs financiers gratuits",
   description: "Des calculateurs simples et gratuits pour votre épargne, vos dettes et votre patrimoine.",
+  alternates: { canonical: "/" },
   openGraph: { title: "CalculArgent — Vos calculs financiers, enfin clairs", description: "Des calculateurs simples et gratuits pour votre épargne, vos dettes et votre patrimoine.", siteName: "CalculArgent", images: [{ url: "/og.png", width: 1731, height: 909, alt: "CalculArgent — Vos calculs financiers, enfin clairs." }], locale: "fr_FR", type: "website" },
   twitter: { card: "summary_large_image", title: "CalculArgent — Vos calculs financiers, enfin clairs", description: "Des calculateurs simples et gratuits pour votre épargne, vos dettes et votre patrimoine.", images: ["/og.png"] },
   icons: {

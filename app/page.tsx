@@ -17,7 +17,7 @@ export default function Home() {
   }, [capital, monthly, years]);
 
   return <main>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "CalculArgent", alternateName: "Calcul Argent", description: "Des calculateurs simples et gratuits pour l’épargne, les dettes et le patrimoine.", inLanguage: "fr-FR" }) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "CalculArgent", alternateName: "Calcul Argent", url: "https://calculargent.fr", description: "Des calculateurs simples et gratuits pour l’épargne, les dettes et le patrimoine.", inLanguage: "fr-FR", isAccessibleForFree: true, author: { "@type": "Person", name: "Loïc Fontaine", url: "https://calculargent.fr/auteur" } }) }} />
       <nav className="nav"><a className="brand" href="#top"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="#outils">Calculateurs</a><a href="/epargne">Épargne</a><a href="/dettes">Dettes</a><a href="#methode">Méthode</a></div><a className="navCta" href="#outils">Commencer</a></nav>
     <section className="hero" id="top">
       <div className="eyebrow"><i /> Finance simple, décisions éclairées</div>

@@ -33,10 +33,23 @@ test("server-renders the CalculArgent homepage", async () => {
   assert.match(html, /Voyez plus clair/);
   assert.match(html, /12<\/b><span>outils essentiels/);
   assert.match(html, /"@type":"WebSite"/);
+  assert.match(html, /rel="canonical" href="http:\/\/localhost:3000\/?"/);
   assert.match(html, /href="\/calculateur\/interets-composes"/);
   assert.match(html, /href="\/calculateur\/mensualite-pret"/);
   assert.match(html, /href="\/budget"/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Building your site/i);
+});
+
+test("renders calculator authority and structured navigation signals", async () => {
+  const response = await render("/calculateur/taux-endettement");
+  const html = await response.text();
+  assert.equal(response.status, 200);
+  assert.match(html, /"@type":"BreadcrumbList"/);
+  assert.match(html, /"@type":"WebPage"/);
+  assert.match(html, /Haut Conseil de stabilité financière/);
+  assert.match(html, /SOURCES INSTITUTIONNELLES/);
+  assert.match(html, /rel="canonical" href="http:\/\/localhost:3000\/calculateur\/taux-endettement"/);
+  assert.doesNotMatch(html, /<meta property="og:image"[^>]+og\.png/);
 });
 
 test("publishes category, author and new calculator pages", async () => {

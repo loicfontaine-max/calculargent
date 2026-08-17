@@ -1,4 +1,4 @@
-export const assumptions = { inflation: 0.02, safeWithdrawalRate: 0.04, updatedAt: "16 août 2026", updatedAtIso: "2026-08-16" };
+export const assumptions = { inflation: 0.02, safeWithdrawalRate: 0.04, updatedAt: "17 août 2026", updatedAtIso: "2026-08-17" };
 
 export type CalculatorSlug = "interets-composes" | "objectif-epargne" | "rendement-apres-inflation" | "fonds-urgence" | "remboursement-dette" | "remboursement-anticipe" | "taux-endettement" | "patrimoine-net" | "independance-financiere" | "mensualite-pret" | "budget-50-30-20" | "comparaison-epargne";
 export type Field = { key: string; label: string; defaultValue: number; min: number; max: number; step: number; suffix: string };
