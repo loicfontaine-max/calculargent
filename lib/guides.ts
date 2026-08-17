@@ -5,7 +5,7 @@ export type Guide = {
   title: string;
   shortTitle: string;
   description: string;
-  category: "Épargne" | "Dettes" | "Budget";
+  category: "Épargne" | "Dettes" | "Patrimoine" | "Budget";
   readingTime: string;
   calculatorSlug: CalculatorSlug;
   intro: string;
@@ -117,6 +117,86 @@ export const guides: Guide[] = [
     comparison: { title: "Une cible selon la situation", headers: ["Situation", "Cible à tester", "Raison"], rows: [["Revenus stables, deux revenus", "2 à 3 mois", "Risque de baisse temporaire plus mutualisé"], ["Un seul revenu", "3 à 6 mois", "Dépendance plus forte à une source"], ["Revenus irréguliers", "6 mois ou davantage", "Variations et délais d’encaissement"], ["Dépense prévue", "Enveloppe séparée", "Ce n’est pas une urgence"]] },
     faq: [{ q: "Le fonds d’urgence doit-il être investi ?", a: "Sa priorité est la disponibilité et la préservation du capital. Un placement volatil peut être en baisse précisément au moment où vous avez besoin de l’argent." }, { q: "Trois mois suffisent-ils toujours ?", a: "Non. C’est un repère. La stabilité de l’emploi, le nombre de revenus, les personnes à charge, le logement et les assurances peuvent justifier une cible différente." }, { q: "Faut-il continuer à l’alimenter une fois la cible atteinte ?", a: "Vous pouvez alors rediriger le virement vers un projet, tout en réévaluant la cible chaque année et en la reconstituant après une utilisation." }],
     sources: [{ label: "Épargne de précaution et définition de l’objectif", publisher: "Autorité des marchés financiers", url: "https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/definir-son-objectif" }, { label: "Gérer son budget et son épargne", publisher: "Ministère de l’Économie", url: "https://www.economie.gouv.fr/particuliers/gerer-mon-argent/gerer-mon-budget-et-mon-epargne" }],
+  },
+  {
+    slug: "calcul-mensualite-pret",
+    title: "Calculer une mensualité de prêt et comprendre le coût du crédit",
+    shortTitle: "Calculer une mensualité de prêt",
+    description: "Comprenez la mensualité, les intérêts, l’assurance et le coût total avant de comparer plusieurs durées ou offres de crédit.",
+    category: "Dettes",
+    readingTime: "8 min",
+    calculatorSlug: "mensualite-pret",
+    intro: "Une mensualité ne dépend pas seulement du montant emprunté. Le taux, la durée et l’assurance modifient à la fois l’effort mensuel et le coût cumulé. Une échéance plus faible peut donc cacher un crédit sensiblement plus cher.",
+    sections: [
+      { title: "Comment se forme une mensualité", paragraphs: ["Pour un prêt amortissable à taux fixe, chaque échéance rembourse une part d’intérêts et une part de capital. Au début, le capital restant dû est élevé : la part des intérêts est donc plus importante. Elle diminue ensuite à mesure que le capital est remboursé.", "La formule du calculateur transforme le taux annuel en taux mensuel et répartit le remboursement sur le nombre total d’échéances. L’assurance est estimée séparément, car son mode de calcul peut dépendre du capital initial ou du capital restant dû."] },
+      { title: "Mensualité basse ou coût total faible", paragraphs: ["Allonger la durée réduit généralement l’échéance, mais les intérêts courent plus longtemps. Comparez toujours la mensualité et le montant total dû, pas seulement le taux nominal.", "Testez plusieurs durées avec une marge pour les charges courantes. Une mensualité théoriquement supportable ne doit pas supprimer l’épargne de précaution ni rendre le budget fragile au moindre imprévu."] },
+      { title: "Pourquoi regarder le TAEG", paragraphs: ["Le taux annuel effectif global rassemble les intérêts et les frais nécessaires à l’obtention du crédit, notamment certains frais de dossier, garanties et assurances obligatoires. Il sert à comparer des offres établies sur une base commune.", "Le calculateur n’est pas un calcul réglementaire du TAEG. Il donne une estimation à partir du taux nominal et d’une assurance simplifiée ; l’offre du prêteur reste la référence pour les frais exacts."] },
+    ],
+    checklist: ["Relever le capital réellement emprunté", "Distinguer taux nominal et TAEG", "Ajouter le coût de l’assurance", "Comparer au moins deux durées", "Vérifier le coût total et la marge budgétaire"],
+    example: { title: "200 000 € sur 20 ans à 3,5 %", body: "Sans assurance, la mensualité théorique est proche de 1 160 €. À 0,30 % d’assurance calculée sur le capital initial, environ 50 € s’ajoutent chaque mois. Le coût final dépend encore des frais de dossier, de garantie et des conventions exactes du contrat.", note: "Une différence de quelques dixièmes de point ou de plusieurs années change fortement le coût cumulé. Comparez les offres à durée et montant identiques." },
+    comparison: { title: "Les chiffres à comparer dans une offre", headers: ["Indicateur", "Ce qu’il mesure", "Limite"], rows: [["Taux nominal", "Intérêts du prêt", "N’inclut pas tous les frais"], ["TAEG", "Coût annuel tout compris réglementaire", "Dépend des éléments obligatoires de l’offre"], ["Mensualité", "Effort de paiement périodique", "Une faible échéance peut allonger le coût"], ["Montant total dû", "Somme cumulée à rembourser", "À lire avec la durée et les conditions"]] },
+    faq: [{ q: "L’assurance est-elle incluse dans la mensualité ?", a: "Elle peut être prélevée avec l’échéance, mais son mode de calcul varie. Vérifiez le coût total, la quotité et si la cotisation repose sur le capital initial ou restant dû." }, { q: "Pourquoi la banque obtient-elle un autre résultat ?", a: "Les dates de déblocage, arrondis, frais, différés, garanties et conventions d’assurance peuvent créer un écart avec une simulation pédagogique." }, { q: "Une durée plus longue est-elle plus avantageuse ?", a: "Elle réduit généralement la mensualité, mais augmente souvent le coût total. L’avantage dépend surtout de la marge budgétaire nécessaire et des conditions du prêt." }],
+    sources: [{ label: "Crédit immobilier : fonctionnement et comparaison des offres", publisher: "Ministère de l’Économie", url: "https://www.economie.gouv.fr/particuliers/gerer-mon-argent/emprunter-et-sassurer/credit-immobilier-comment-ca-marche" }, { label: "Ce que comprend le taux annuel effectif global", publisher: "Ministère de l’Économie", url: "https://www.economie.gouv.fr/particuliers/emprunter-et-sassurer/credit-quoi-correspond-le-taux-annuel-effectif-global-taeg" }],
+  },
+  {
+    slug: "calculer-patrimoine-net",
+    title: "Calculer son patrimoine net : actifs, dettes et méthode de suivi",
+    shortTitle: "Calculer son patrimoine net",
+    description: "Dressez un bilan personnel cohérent, valorisez vos actifs avec prudence et retranchez les capitaux restant dus.",
+    category: "Patrimoine",
+    readingTime: "7 min",
+    calculatorSlug: "patrimoine-net",
+    intro: "Le patrimoine net est la différence entre ce que vous détenez et ce que vous devez encore. C’est une photographie à une date donnée, utile pour suivre une trajectoire, mais ce n’est ni un revenu disponible ni une mesure de votre valeur personnelle.",
+    sections: [
+      { title: "Recenser les actifs sans les surestimer", paragraphs: ["Additionnez les liquidités, placements financiers, biens immobiliers et actifs professionnels que vous détenez réellement. Pour un bien coté, utilisez une valeur récente ; pour l’immobilier, retenez une estimation de marché prudente et documentée.", "Les biens d’usage comme une voiture peuvent être inclus s’ils ont une valeur de revente significative. Utilisez la même convention à chaque mise à jour afin que la comparaison dans le temps reste lisible."] },
+      { title: "Retrancher tous les passifs", paragraphs: ["Déduisez le capital restant dû des prêts immobiliers, crédits à la consommation et autres dettes. Ne retranchez pas le total des mensualités futures : les intérêts qui ne sont pas encore dus ne constituent pas le capital restant.", "Une résidence achetée à crédit figure donc pour sa valeur estimée dans les actifs, tandis que le capital du prêt restant figure dans les passifs."] },
+      { title: "Interpréter l’évolution", paragraphs: ["Une hausse peut venir de l’épargne, du remboursement des dettes ou de la revalorisation des actifs. Distinguez ces trois causes : une hausse de marché peut s’inverser, alors qu’un capital remboursé est une dette effectivement réduite.", "Mettez le bilan à jour trimestriellement ou semestriellement, sans réagir à chaque fluctuation. Le suivi doit aider à décider, pas créer une illusion de précision quotidienne."] },
+    ],
+    checklist: ["Choisir une date de référence", "Valoriser les actifs à leur prix de marché prudent", "Noter tous les capitaux restant dus", "Conserver la même convention de calcul", "Comparer l’évolution et ses causes"],
+    example: { title: "265 000 € d’actifs et 145 000 € de dettes", body: "Avec 15 000 € de liquidités, 30 000 € de placements et un logement estimé à 220 000 €, les actifs atteignent 265 000 €. Après déduction de 145 000 € de capital restant dû, le patrimoine net est de 120 000 €.", note: "Une estimation immobilière n’est pas un prix de vente garanti. Les frais de cession et la fiscalité ne sont pas déduits par défaut." },
+    comparison: { title: "Ce qui entre dans le bilan", headers: ["Élément", "Catégorie", "Valeur à retenir"], rows: [["Compte et livret", "Actif financier", "Solde à la date du bilan"], ["Placement coté", "Actif financier", "Valeur de marché"], ["Bien immobilier", "Actif non financier", "Estimation de vente prudente"], ["Crédit en cours", "Passif", "Capital restant dû"]] },
+    faq: [{ q: "La résidence principale compte-t-elle dans le patrimoine ?", a: "Oui, à sa valeur de marché estimée. Le capital restant dû du crédit associé doit apparaître séparément dans les dettes." }, { q: "Faut-il inclure les droits à la retraite ?", a: "Le calcul personnel simplifié ne les valorise généralement pas comme un actif disponible. Vous pouvez les suivre séparément comme un revenu futur estimé." }, { q: "Patrimoine net et patrimoine financier sont-ils identiques ?", a: "Non. Le patrimoine financier net se limite aux actifs et passifs financiers, tandis que le patrimoine net inclut aussi les actifs non financiers comme l’immobilier." }],
+    sources: [{ label: "Définition du patrimoine net des ménages", publisher: "Insee", url: "https://www.insee.fr/fr/metadonnees/definition/c2248" }, { label: "Définition et valorisation d’un compte de patrimoine", publisher: "Insee", url: "https://www.insee.fr/fr/metadonnees/definition/c1724" }],
+  },
+  {
+    slug: "budget-50-30-20",
+    title: "Budget 50/30/20 : méthode, exemple et adaptations utiles",
+    shortTitle: "Comprendre le budget 50/30/20",
+    description: "Utilisez la règle 50/30/20 comme grille de lecture, classez vos dépenses et adaptez les pourcentages à votre situation réelle.",
+    category: "Budget",
+    readingTime: "7 min",
+    calculatorSlug: "budget-50-30-20",
+    intro: "La méthode 50/30/20 répartit le revenu disponible entre besoins, envies et épargne ou remboursement de dettes. C’est un repère simple, pas une norme : le coût du logement, la composition du foyer et le niveau de revenu peuvent imposer une autre répartition.",
+    sections: [
+      { title: "Classer avant de calculer", paragraphs: ["Les besoins regroupent les dépenses difficiles à éviter à court terme : logement, énergie, alimentation de base, transport nécessaire, assurances et échéances obligatoires. Les envies correspondent aux dépenses ajustables sans compromettre immédiatement le fonctionnement du foyer.", "La troisième enveloppe rassemble l’épargne, l’investissement et les remboursements supplémentaires. Une mensualité minimale obligatoire peut rester dans les besoins, tandis qu’un versement anticipé volontaire rejoint l’effort de désendettement."] },
+      { title: "Pourquoi les pourcentages peuvent différer", paragraphs: ["Un loyer élevé peut faire dépasser 50 % de besoins sans mauvaise gestion. À l’inverse, un revenu confortable peut permettre plus de 20 % d’épargne sans réduire les loisirs.", "Utilisez la grille pour identifier les postes, puis fixez une trajectoire progressive. Le premier objectif peut simplement être de retrouver un solde positif et de constituer une petite réserve."] },
+      { title: "Traiter les dépenses irrégulières", paragraphs: ["Divisez par douze les dépenses annuelles prévisibles : assurances, entretien, impôts, rentrée ou vacances. Les ignorer donne un budget artificiellement équilibré pendant certains mois.", "Créez des enveloppes mensuelles séparées. Une dépense annuelle financée à l’avance n’est ni une urgence ni un accident budgétaire."] },
+    ],
+    checklist: ["Partir du revenu net réellement disponible", "Moyenner les dépenses irrégulières", "Distinguer obligatoire et ajustable", "Mesurer le solde avant de viser un ratio", "Réviser les enveloppes après trois mois"],
+    example: { title: "2 800 € de revenu mensuel", body: "Le repère théorique donne 1 400 € pour les besoins, 840 € pour les envies et 560 € pour l’épargne ou le désendettement. Si les besoins réels atteignent 1 650 €, l’objectif n’est pas de nier l’écart mais de décider où récupérer progressivement de la marge.", note: "Les pourcentages ne sont pas une obligation. Un budget est utile lorsqu’il reflète vos dépenses réelles et permet des décisions soutenables." },
+    comparison: { title: "Bien classer quelques dépenses", headers: ["Dépense", "Classement fréquent", "Question à poser"], rows: [["Loyer et énergie", "Besoins", "Peut-on les réduire à court terme ?"], ["Restaurant", "Envies", "Est-ce ajustable ce mois-ci ?"], ["Mensualité minimale", "Besoins", "Est-elle contractuellement obligatoire ?"], ["Remboursement supplémentaire", "Épargne / dette", "Accélère-t-il un objectif ?"]] },
+    faq: [{ q: "La règle 50/30/20 est-elle adaptée aux petits revenus ?", a: "Elle peut servir de diagnostic, mais les dépenses essentielles occupent souvent une part plus élevée. Commencez par le solde et une petite marge réaliste plutôt que par un ratio impossible." }, { q: "Où classer les remboursements de crédit ?", a: "La mensualité obligatoire peut être classée parmi les besoins ; un remboursement volontaire supplémentaire rejoint l’effort d’épargne et de désendettement." }, { q: "Faut-il calculer sur le salaire avant impôt ?", a: "Pour gérer le budget courant, partez du revenu réellement disponible après les prélèvements qui ne peuvent pas être dépensés." }],
+    sources: [{ label: "Informations pratiques pour gérer son budget", publisher: "Ministère de l’Économie", url: "https://www.economie.gouv.fr/particuliers/gerer-mon-argent/gerer-mon-budget-et-mon-epargne" }, { label: "Adapter son épargne à sa situation personnelle", publisher: "Ministère de l’Économie", url: "https://www.economie.gouv.fr/facileco/epargner-en-fonction-de-sa-situation-personnelle" }],
+  },
+  {
+    slug: "rendement-reel-inflation",
+    title: "Rendement réel : mesurer l’effet de l’inflation sur son épargne",
+    shortTitle: "Calculer un rendement après inflation",
+    description: "Distinguez rendement nominal, rendement réel et pouvoir d’achat afin d’interpréter correctement la progression d’un placement.",
+    category: "Épargne",
+    readingTime: "7 min",
+    calculatorSlug: "rendement-apres-inflation",
+    intro: "Voir un capital augmenter ne signifie pas nécessairement pouvoir acheter davantage. Le rendement réel corrige le rendement nominal de la hausse générale des prix et donne une lecture plus proche de l’évolution du pouvoir d’achat.",
+    sections: [
+      { title: "Nominal et réel ne répondent pas à la même question", paragraphs: ["Le rendement nominal mesure la progression en euros courants. Le rendement réel cherche à mesurer ce qu’il reste une fois l’inflation prise en compte.", "Une approximation consiste à soustraire l’inflation au rendement. La formule exacte divise le facteur de croissance du placement par celui des prix : (1 + rendement nominal) ÷ (1 + inflation) − 1."] },
+      { title: "Pourquoi l’inflation personnelle peut différer", paragraphs: ["L’indice des prix à la consommation mesure une variation moyenne sur un panier de biens et services. La composition réelle de vos dépenses peut évoluer différemment selon le logement, le transport, l’énergie ou la santé.", "La simulation utilise donc un taux d’inflation choisi par l’utilisateur. Testez plusieurs hypothèses plutôt que de supposer que le dernier chiffre publié restera constant pendant toute la durée."] },
+      { title: "Ajouter les frais et la fiscalité", paragraphs: ["Pour une comparaison complète, partez d’un rendement après frais et, lorsque c’est pertinent, après fiscalité. Les prélèvements réduisent la croissance avant même la correction de l’inflation.", "Un rendement réel positif n’efface pas le risque du placement. L’horizon, la disponibilité et la possibilité de perte restent déterminants."] },
+    ],
+    checklist: ["Partir d’un rendement net de frais", "Choisir plusieurs hypothèses d’inflation", "Utiliser la formule exacte", "Observer le pouvoir d’achat final", "Conserver une hypothèse prudente"],
+    example: { title: "5 % de rendement et 2 % d’inflation", body: "La simple soustraction donne 3 %. La formule exacte produit environ 2,94 % de rendement réel annuel. Sur 10 ans, 20 000 € progresseraient théoriquement vers environ 26 700 € de pouvoir d’achat constant, avant fiscalité.", note: "Les taux constants simplifient la réalité. Rendement et inflation varient d’une année à l’autre et le résultat dépend de leur enchaînement." },
+    comparison: { title: "Trois lectures d’un même placement", headers: ["Mesure", "Prend en compte", "Question"], rows: [["Rendement brut", "Performance annoncée", "Combien produit le support avant coûts ?"], ["Rendement net", "Frais et éventuellement fiscalité", "Combien reste-t-il réellement ?"], ["Rendement réel", "Inflation en plus", "Le pouvoir d’achat progresse-t-il ?"]] },
+    faq: [{ q: "Peut-on simplement soustraire l’inflation ?", a: "C’est une approximation acceptable pour de petits taux. La formule exacte tient compte de la composition des deux variations." }, { q: "Quel taux d’inflation choisir ?", a: "Testez plusieurs hypothèses cohérentes avec la durée, sans prolonger automatiquement le dernier taux observé. L’IPC reste une moyenne nationale." }, { q: "Un rendement réel négatif signifie-t-il une perte en euros ?", a: "Pas nécessairement. Le capital nominal peut augmenter tout en perdant du pouvoir d’achat si les prix progressent plus vite." }],
+    sources: [{ label: "Définition de l’indice des prix à la consommation", publisher: "Insee", url: "https://www.insee.fr/fr/metadonnees/definition/c1557" }, { label: "Rendement réel, inflation et risque des placements", publisher: "Autorité des marchés financiers", url: "https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/rendement-et-risque-des-placements-en-actions-0" }],
   },
 ];
 

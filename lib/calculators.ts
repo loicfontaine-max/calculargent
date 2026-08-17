@@ -12,7 +12,7 @@ export type CalculationScenario = { label: string; value: number; unit: string }
 export const calculators: Calculator[] = [
   {
     slug: "interets-composes", category: "Épargne", shortTitle: "Intérêts composés", title: "Calculez la croissance de votre épargne", color: "mint",
-    description: "Estimez votre capital final avec des versements mensuels et un rendement régulier.",
+    description: "Estimez votre capital final, vos versements cumulés et les intérêts produits selon la durée et le rendement choisis.",
     fields: [
       { key: "initial_capital", label: "Capital initial", defaultValue: 10000, min: 0, max: 500000, step: 1000, suffix: "€" },
       { key: "monthly_savings", label: "Épargne mensuelle", defaultValue: 100, min: 0, max: 5000, step: 25, suffix: "€" },
@@ -27,7 +27,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "objectif-epargne", category: "Épargne", shortTitle: "Objectif d’épargne", title: "Combien épargner chaque mois pour atteindre votre objectif ?", color: "yellow",
-    description: "Calculez le versement mensuel nécessaire pour financer un projet à une date donnée.",
+    description: "Calculez le versement mensuel nécessaire pour atteindre un objectif d’épargne à une date et avec un rendement donnés.",
     fields: [
       { key: "target", label: "Objectif à atteindre", defaultValue: 50000, min: 1000, max: 1000000, step: 1000, suffix: "€" },
       { key: "capital", label: "Capital déjà épargné", defaultValue: 5000, min: 0, max: 500000, step: 500, suffix: "€" },
@@ -42,7 +42,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "rendement-apres-inflation", category: "Épargne", shortTitle: "Rendement après inflation", title: "Quel est le rendement réel de votre placement ?", color: "coral",
-    description: "Mesurez ce qu’il reste de votre rendement une fois l’inflation prise en compte.",
+    description: "Calculez le rendement réel de votre placement et l’évolution de son pouvoir d’achat après prise en compte de l’inflation.",
     fields: [
       { key: "capital", label: "Capital investi", defaultValue: 20000, min: 100, max: 1000000, step: 1000, suffix: "€" },
       { key: "gross_rate", label: "Rendement nominal", defaultValue: 5, min: -5, max: 20, step: 0.1, suffix: "%" },
@@ -57,7 +57,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "fonds-urgence", category: "Épargne", shortTitle: "Fonds d’urgence", title: "Combien garder dans votre fonds d’urgence ?", color: "mint",
-    description: "Estimez votre réserve de sécurité à partir de vos dépenses essentielles.",
+    description: "Estimez votre fonds d’urgence à partir des dépenses essentielles, du nombre de mois à couvrir et de l’épargne déjà disponible.",
     fields: [
       { key: "expenses", label: "Dépenses essentielles mensuelles", defaultValue: 1800, min: 100, max: 15000, step: 100, suffix: "€" },
       { key: "months", label: "Mois de sécurité souhaités", defaultValue: 4, min: 1, max: 18, step: 1, suffix: "mois" },
@@ -71,7 +71,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "remboursement-dette", category: "Dettes", shortTitle: "Durée de remboursement", title: "Quand votre dette sera-t-elle remboursée ?", color: "coral",
-    description: "Estimez la durée de remboursement et le coût total des intérêts de votre dette.",
+    description: "Estimez la durée nécessaire pour rembourser une dette et le coût approximatif des intérêts selon votre mensualité.",
     fields: [
       { key: "balance", label: "Capital restant dû", defaultValue: 12000, min: 500, max: 500000, step: 500, suffix: "€" },
       { key: "rate", label: "Taux annuel", defaultValue: 6, min: 0, max: 25, step: 0.1, suffix: "%" },
@@ -85,7 +85,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "remboursement-anticipe", category: "Dettes", shortTitle: "Remboursement anticipé", title: "Combien pouvez-vous économiser en remboursant plus vite ?", color: "yellow",
-    description: "Comparez votre échéancier actuel avec une mensualité augmentée.",
+    description: "Mesurez le temps et les intérêts potentiellement économisés en augmentant la mensualité consacrée au remboursement.",
     fields: [
       { key: "balance", label: "Capital restant dû", defaultValue: 18000, min: 500, max: 500000, step: 500, suffix: "€" },
       { key: "rate", label: "Taux annuel", defaultValue: 7, min: 0, max: 25, step: 0.1, suffix: "%" },
@@ -100,7 +100,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "taux-endettement", category: "Dettes", shortTitle: "Taux d’endettement", title: "Quel est votre taux d’endettement ?", color: "mint",
-    description: "Rapportez vos mensualités de crédit à vos revenus nets mensuels.",
+    description: "Calculez votre taux d’endettement, le poids de vos charges de crédit et votre reste mensuel avant dépenses courantes.",
     fields: [
       { key: "income", label: "Revenus nets mensuels", defaultValue: 3500, min: 100, max: 50000, step: 100, suffix: "€" },
       { key: "housing", label: "Crédit immobilier ou loyer retenu", defaultValue: 900, min: 0, max: 10000, step: 50, suffix: "€" },
@@ -114,7 +114,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "patrimoine-net", category: "Patrimoine", shortTitle: "Patrimoine net", title: "Quel est votre patrimoine net aujourd’hui ?", color: "yellow",
-    description: "Additionnez vos actifs et retranchez l’ensemble de vos dettes.",
+    description: "Calculez votre patrimoine net en additionnant liquidités, placements et immobilier, puis en retranchant vos dettes.",
     fields: [
       { key: "cash", label: "Épargne disponible", defaultValue: 15000, min: 0, max: 500000, step: 1000, suffix: "€" },
       { key: "investments", label: "Placements financiers", defaultValue: 30000, min: 0, max: 2000000, step: 1000, suffix: "€" },
@@ -129,7 +129,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "independance-financiere", category: "Patrimoine", shortTitle: "Indépendance financière", title: "Quel capital viser pour devenir financièrement indépendant ?", color: "coral",
-    description: "Estimez le capital susceptible de financer durablement vos dépenses annuelles.",
+    description: "Estimez un capital cible théorique à partir de vos dépenses annuelles, d’un taux de retrait et du portefeuille déjà constitué.",
     fields: [
       { key: "monthly_expenses", label: "Dépenses mensuelles visées", defaultValue: 2500, min: 500, max: 20000, step: 100, suffix: "€" },
       { key: "withdrawal_rate", label: "Taux de retrait annuel", defaultValue: 4, min: 2, max: 7, step: 0.1, suffix: "%" },
@@ -143,7 +143,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "mensualite-pret", category: "Dettes", shortTitle: "Mensualité de prêt", title: "Quelle mensualité prévoir pour votre prêt ?", color: "mint",
-    description: "Estimez la mensualité, l’assurance et le coût total d’un emprunt amortissable.",
+    description: "Estimez la mensualité, l’assurance et le coût total d’un prêt amortissable selon le capital, le taux et la durée.",
     fields: [
       { key: "capital", label: "Montant emprunté", defaultValue: 200000, min: 1000, max: 2000000, step: 5000, suffix: "€" },
       { key: "rate", label: "Taux annuel hors assurance", defaultValue: 3.5, min: 0, max: 20, step: 0.1, suffix: "%" },
@@ -158,7 +158,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "budget-50-30-20", category: "Budget", shortTitle: "Budget 50/30/20", title: "Comment se répartit votre budget mensuel ?", color: "yellow",
-    description: "Comparez vos dépenses et votre épargne à une grille budgétaire simple, sans en faire une règle rigide.",
+    description: "Répartissez revenus, besoins, envies et épargne selon la grille 50/30/20, puis mesurez le solde réellement disponible.",
     fields: [
       { key: "income", label: "Revenus nets mensuels", defaultValue: 2800, min: 100, max: 50000, step: 100, suffix: "€" },
       { key: "needs", label: "Dépenses essentielles", defaultValue: 1400, min: 0, max: 40000, step: 50, suffix: "€" },
@@ -173,7 +173,7 @@ export const calculators: Calculator[] = [
   },
   {
     slug: "comparaison-epargne", category: "Épargne", shortTitle: "Comparer deux épargnes", title: "Quelle stratégie d’épargne accumule le plus ?", color: "coral",
-    description: "Comparez deux couples de versement mensuel et de rendement sur la même durée.",
+    description: "Comparez deux stratégies d’épargne avec des versements et rendements différents sur une durée identique.",
     fields: [
       { key: "initial", label: "Capital initial commun", defaultValue: 5000, min: 0, max: 500000, step: 500, suffix: "€" },
       { key: "monthly_a", label: "Versement mensuel A", defaultValue: 200, min: 0, max: 5000, step: 25, suffix: "€" },

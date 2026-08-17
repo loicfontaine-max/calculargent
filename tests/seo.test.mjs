@@ -32,9 +32,9 @@ test("keeps noindex trust pages out of the sitemap", async () => {
   assert.doesNotMatch(source, /baseUrl}\/mentions-legales/);
 });
 
-test("publishes five substantial guides backed by official sources", () => {
-  assert.equal(guides.length, 5);
-  assert.equal(new Set(guides.map(({ slug }) => slug)).size, 5);
+test("publishes nine substantial guides backed by official sources", () => {
+  assert.equal(guides.length, 9);
+  assert.equal(new Set(guides.map(({ slug }) => slug)).size, 9);
   for (const guide of guides) {
     assert.ok(guide.sections.length >= 3, `${guide.slug} doit comporter au moins trois sections`);
     assert.ok(guide.checklist.length >= 5, `${guide.slug} doit proposer un plan d’action`);
@@ -43,4 +43,11 @@ test("publishes five substantial guides backed by official sources", () => {
     assert.ok(guide.sources.length >= 2, `${guide.slug} doit citer deux sources`);
     for (const source of guide.sources) assert.ok(trustedHosts.has(new URL(source.url).hostname));
   }
+});
+
+test("keeps a reusable live SEO audit in the project", async () => {
+  const source = await readFile(new URL("../scripts/seo-audit.mjs", import.meta.url), "utf8");
+  assert.match(source, /duplicateTitles/);
+  assert.match(source, /canonical/);
+  assert.match(source, /structuredData/);
 });

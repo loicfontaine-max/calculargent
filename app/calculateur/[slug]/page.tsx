@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { CalculatorEngine } from "../../../components/CalculatorEngine";
 import { AdSlot } from "../../../components/AdSlot";
 import { HelpfulFeedback } from "../../../components/HelpfulFeedback";
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const calculator = getCalculator(slug);
   if (!calculator) return {};
-  const title = `${calculator.shortTitle} : calculateur gratuit en ligne | CalculArgent`;
+  const title = `${calculator.shortTitle} : calculateur gratuit | CalculArgent`;
   return {
     title, description: calculator.description,
     alternates: { canonical: `/calculateur/${calculator.slug}` },
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CalculatorPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const canonical = canonicalSlug(slug);
-  if (canonical !== slug) redirect(`/calculateur/${canonical}`);
+  if (canonical !== slug) permanentRedirect(`/calculateur/${canonical}`);
   const calculator = getCalculator(slug);
   if (!calculator) notFound();
   const siteUrl = process.env.SITE_URL || "https://calculargent.fr";
@@ -42,7 +42,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
 
   return <main>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    <nav className="nav"><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="/#outils">Calculateurs</a><a href="#comprendre">Comprendre</a><a href="#faq">FAQ</a></div><a className="back" href="/#outils">← Tous les outils</a></nav>
+    <nav className="nav"><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="/#outils">Calculateurs</a><a href="#comprendre">Comprendre</a><a href="/lexique">Lexique</a><a href="#faq">FAQ</a></div><a className="back" href="/#outils">← Tous les outils</a></nav>
     <div className="breadcrumb"><a href="/">Accueil</a><span>›</span><a href={`/${categoryRoute}`}>{calculator.category}</a><span>›</span><b>{calculator.shortTitle}</b></div>
     <header className="detailHero"><span className="kicker dark">{calculator.category.toUpperCase()} · CALCULATEUR GRATUIT</span><h1>{calculator.title}</h1><p>{calculator.description} Modifiez les données : le résultat se met à jour instantanément. Le partage reste volontaire.</p></header>
     <section className="engineWrap"><CalculatorEngine calculator={calculator} /><p className="calculatorDisclaimer">Simulation indicative, avant fiscalité et frais sauf mention contraire. Elle ne constitue ni une prévision ni un conseil financier.</p></section>
@@ -60,7 +60,7 @@ export default async function CalculatorPage({ params }: { params: Promise<{ slu
     {calculatorGuides.length > 0 && <section className="calculatorGuideCta"><div><span className="kicker dark">POUR INTERPRÉTER LE RÉSULTAT</span><h2>{calculatorGuides[0].shortTitle}</h2><p>{calculatorGuides[0].description}</p></div><a className="primary" href={`/guides/${calculatorGuides[0].slug}`}>Lire le guide <span>→</span></a></section>}
 
     <section className="related"><div className="sectionHead"><div><span className="kicker dark">POURSUIVRE VOTRE CALCUL</span><h2>Trois outils complémentaires</h2></div><p>Reliez vos décisions d’épargne, de dette et de patrimoine pour obtenir une vision plus complète.</p></div><div className="cardGrid">{related.map((item) => <a className={`toolCard compact ${item.color}`} href={`/calculateur/${item.slug}`} key={item.slug}><span>{item.category}</span><h3>{item.shortTitle}</h3><p>{item.description}</p><b>Ouvrir le calculateur →</b></a>)}</div></section>
-    <section className="methodNote"><b>Méthodologie transparente</b><p>Calcul et références vérifiés le {assumptions.updatedAt} par <a className="textLink" href="/auteur">Loïc Fontaine</a>. Les formules sont visibles afin que vous puissiez comprendre les limites de chaque estimation.</p></section>
+    <section className="methodNote"><b>Méthodologie transparente</b><p>Calcul et références vérifiés le {assumptions.updatedAt} par <a className="textLink" href="/auteur">Loïc Fontaine</a>. Les formules sont visibles afin que vous puissiez comprendre les limites de chaque estimation. Retrouvez les notions utilisées dans le <a className="textLink" href="/lexique">lexique financier</a>.</p></section>
     <section className="feedbackWrap"><HelpfulFeedback title={calculator.shortTitle} /></section>
     <footer><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><p>Des repères simples pour vos décisions financières.</p><small><a href="/a-propos">À propos</a> · <a href="/auteur">Auteur</a> · <a href="/methode">Méthode</a> · <a href="/contact">Contact</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/cookies">Cookies</a> · <a href="/publicite">Publicité</a> · <a href="/mentions-legales">Mentions légales</a></small></footer>
   </main>;

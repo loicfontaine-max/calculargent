@@ -9,8 +9,11 @@ export function generateStaticParams() { return guides.map(({ slug }) => ({ slug
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const guide = getGuide((await params).slug);
   if (!guide) return {};
-  return { title: `${guide.title} | CalculArgent`, description: guide.description, alternates: { canonical: `/guides/${guide.slug}` }, openGraph: { title: guide.title, description: guide.description, url: `/guides/${guide.slug}`, type: "article", images: [] }, twitter: { card: "summary", title: guide.title, description: guide.description, images: [] } };
+  const title = `${guide.shortTitle} | CalculArgent`;
+  return { title, description: guide.description, alternates: { canonical: `/guides/${guide.slug}` }, openGraph: { title, description: guide.description, url: `/guides/${guide.slug}`, type: "article", images: [] }, twitter: { card: "summary", title, description: guide.description, images: [] } };
 }
+
+function sectionId(title: string) { return title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const guide = getGuide((await params).slug);
@@ -26,10 +29,11 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   ];
   return <main>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    <nav className="nav"><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="/guides">Tous les guides</a><a href="#methode">Méthode</a><a href="#faq">FAQ</a></div><a className="back" href="/guides">← Guides</a></nav>
+    <nav className="nav"><a className="brand" href="/"><span>Calcul</span><b>Argent</b></a><div className="navLinks"><a href="/guides">Tous les guides</a><a href="/lexique">Lexique</a><a href="#methode">Méthode</a><a href="#faq">FAQ</a></div><a className="back" href="/guides">← Guides</a></nav>
     <div className="breadcrumb"><a href="/">Accueil</a><span>›</span><a href="/guides">Guides</a><span>›</span><b>{guide.shortTitle}</b></div>
     <header className="guideHero"><span className="kicker dark">{guide.category.toUpperCase()} · GUIDE PRATIQUE · {guide.readingTime.toUpperCase()}</span><h1>{guide.title}</h1><p>{guide.intro}</p><div className="guideByline">Écrit et vérifié par <a href="/auteur">Loïc Fontaine</a> · Mis à jour le {assumptions.updatedAt}</div></header>
-    <section className="guideBody">{guide.sections.map((section, index) => <section className="guideSection" key={section.title}><span>{String(index + 1).padStart(2, "0")}</span><div><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></section>)}</section>
+    <nav className="guideToc" aria-label="Sommaire"><b>Dans ce guide</b><ol>{guide.sections.map((section, index) => <li key={section.title}><a href={`#${sectionId(section.title)}`}>{index + 1}. {section.title}</a></li>)}<li><a href="#methode">Plan d’action</a></li><li><a href="#faq">Questions fréquentes</a></li></ol></nav>
+    <section className="guideBody">{guide.sections.map((section, index) => <section className="guideSection" id={sectionId(section.title)} key={section.title}><span>{String(index + 1).padStart(2, "0")}</span><div><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></section>)}</section>
     <section className="guideExample"><div><span className="kicker dark">EXEMPLE CHIFFRÉ</span><h2>{guide.example.title}</h2></div><div><p>{guide.example.body}</p><small>{guide.example.note}</small></div></section>
     <section className="guideTableWrap"><h2>{guide.comparison.title}</h2><div className="tableScroll"><table className="guideTable"><thead><tr>{guide.comparison.headers.map((header) => <th key={header}>{header}</th>)}</tr></thead><tbody>{guide.comparison.rows.map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell}>{cell}</td>)}</tr>)}</tbody></table></div></section>
     <section className="guideChecklist" id="methode"><div><span className="kicker">PLAN D’ACTION</span><h2>À faire dans l’ordre</h2></div><ol>{guide.checklist.map((item, index) => <li key={item}><b>{index + 1}</b>{item}</li>)}</ol></section>

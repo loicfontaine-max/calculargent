@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render(pathname = "/") {
+async function render(pathname = "/", origin = "http://localhost") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request(`http://localhost${pathname}`, {
+    new Request(`${origin}${pathname}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -62,7 +62,7 @@ test("publishes category, author and new calculator pages", async () => {
 });
 
 test("publishes the guide hub and complete editorial guides", async () => {
-  const paths = ["/guides", "/guides/interets-composes", "/guides/combien-epargner-par-mois", "/guides/rembourser-credit-ou-epargner", "/guides/calcul-taux-endettement", "/guides/construire-fonds-urgence"];
+  const paths = ["/guides", "/guides/interets-composes", "/guides/combien-epargner-par-mois", "/guides/rembourser-credit-ou-epargner", "/guides/calcul-taux-endettement", "/guides/construire-fonds-urgence", "/guides/calcul-mensualite-pret", "/guides/calculer-patrimoine-net", "/guides/budget-50-30-20", "/guides/rendement-reel-inflation"];
   const responses = await Promise.all(paths.map((path) => render(path)));
   assert.deepEqual(responses.map((response) => response.status), paths.map(() => 200));
   const pages = await Promise.all(responses.map((response) => response.text()));
@@ -74,6 +74,42 @@ test("publishes the guide hub and complete editorial guides", async () => {
     assert.match(html, /PASSEZ À VOS CHIFFRES/);
     assert.doesNotMatch(html, /<meta property="og:image"[^>]+og\.png/);
   }
+});
+
+test("publishes a structured glossary and an editorial update log", async () => {
+  const [glossaryResponse, updatesResponse] = await Promise.all([render("/lexique"), render("/journal-des-mises-a-jour")]);
+  assert.equal(glossaryResponse.status, 200);
+  assert.equal(updatesResponse.status, 200);
+  const [glossary, updates] = await Promise.all([glossaryResponse.text(), updatesResponse.text()]);
+  assert.match(glossary, /"@type":"DefinedTermSet"/);
+  assert.match(glossary, /Taux annuel effectif global/);
+  assert.match(glossary, /href="\/calculateur\/patrimoine-net"/);
+  assert.match(updates, /Journal des/);
+  assert.match(updates, /Architecture éditoriale/);
+});
+
+test("publishes every indexable page in the sitemap", async () => {
+  const response = await render("/sitemap.xml");
+  assert.equal(response.status, 200);
+  const xml = await response.text();
+  const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+  assert.equal(locations.length, 35);
+  assert.equal(new Set(locations).size, 35);
+  assert.ok(locations.some((location) => location.endsWith("/lexique")));
+  assert.ok(locations.some((location) => location.endsWith("/journal-des-mises-a-jour")));
+  assert.ok(locations.some((location) => location.endsWith("/guides/rendement-reel-inflation")));
+});
+
+test("consolidates the www host and keeps missing pages out of the index", async () => {
+  const wwwResponse = await render("/guides?source=test", "https://www.calculargent.fr");
+  assert.equal(wwwResponse.status, 308);
+  assert.equal(wwwResponse.headers.get("location"), "https://calculargent.fr/guides?source=test");
+
+  const missingResponse = await render("/page-inexistante");
+  assert.equal(missingResponse.status, 404);
+  const missing = await missingResponse.text();
+  assert.match(missing, /Page introuvable/);
+  assert.match(missing, /<meta name="robots" content="noindex, follow"/i);
 });
 
 test("keeps calculator content and assumptions centralized", async () => {
